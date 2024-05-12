@@ -25,8 +25,10 @@ public class TennisGame {
 
         for (var scorerName : scorers) {
             Player ballWinner = whoWonThisBall(scorerName);
+            Player ballLooser = whoLostThisBall(scorerName);
+
             ballWinner.increaseScore();
-            scenario.add(calculateRoundScore(ballWinner));
+            scenario.add(calculateRoundScore(ballWinner, ballLooser));
         }
         return scenario;
     }
@@ -38,8 +40,11 @@ public class TennisGame {
             default -> throw new UnknownPlayerException("Unknown player name" + scorerName);
         };
     }
+    private Player whoLostThisBall(String ballWinnerName) {
+        return whoWonThisBall(ballWinnerName).equals(playerA) ? playerB : playerA;
+    }
 
-    private String calculateRoundScore(Player roundScorer) {
+    private String calculateRoundScore(Player roundScorer, Player roundLooser) {
 
         if (playerA.getScore() < 3 || playerB.getScore() < 3) {
             if (roundScorer.doesHitTheWinPoint()) {
@@ -52,8 +57,8 @@ public class TennisGame {
                 return DEUCE_MESSAGE;
             } else
             {
-                if (playerA.getScore() - playerB.getScore() == 2) {
-                    return String.format(WIN_MESSAGE_TEMPLATE, playerA.getName());
+                if (roundScorer.getScore() - roundLooser.getScore() == 2) {
+                    return String.format(WIN_MESSAGE_TEMPLATE, roundScorer.getName());
                 }
                 else {
                     return String.format("Deuce, advantage for Player %s", playerA.getName());
