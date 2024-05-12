@@ -10,7 +10,8 @@ public class TennisGame {
 
     public static final String PLAYER_A_NAME = "A";
     public static final String PLAYER_B_NAME = "B";
-    private static final String WIN_MESSAGE = "Player %s wins the game";
+    private static final String WIN_MESSAGE_TEMPLATE = "Player %s wins the game";
+    public static final String SCORE_MESSAGE_TEMPLATE = "Player A : %s / Player B : %s";
 
     Player playerA = new Player(PLAYER_A_NAME);
     Player playerB = new Player(PLAYER_B_NAME);
@@ -37,23 +38,13 @@ public class TennisGame {
         };
     }
 
-    private String calculateRoundScore(Player scorerName) {
+    private String calculateRoundScore(Player roundScorer) {
 
-        if (playerA.getScore() >= 4 || playerB.getScore() >= 4) {
-            return String.format(WIN_MESSAGE, scorerName.getName());
+        if (roundScorer.doesHitTheWinPoint()) {
+            return String.format(WIN_MESSAGE_TEMPLATE, roundScorer.getName());
         } else {
-            return String.format("Player A : %s / Player B : %s", scoreToDisplay(playerA.getScore()), scoreToDisplay(playerB.getScore()));
+            return String.format(SCORE_MESSAGE_TEMPLATE, playerA.scoreToDisplay(), playerB.scoreToDisplay());
         }
-    }
-
-    private String scoreToDisplay(int intScore) {
-        return switch (intScore) {
-            case 0 -> "0";
-            case 1 -> "15";
-            case 2 -> "30";
-            case 3 -> "40";
-            default -> throw new IllegalStateException("Unexpected value: " + intScore);
-        };
     }
 
     private List<String> fetchScorersFromGameInput(String gameInput) {
