@@ -33,20 +33,9 @@ public class TennisGame {
         return scenario;
     }
 
-    private Player whoWonThisBall(String scorerName) throws UnknownPlayerException {
-        return switch (scorerName) {
-            case "A" -> playerA;
-            case "B" -> playerB;
-            default -> throw new UnknownPlayerException("Unknown player name" + scorerName);
-        };
-    }
-    private Player whoLostThisBall(String ballWinnerName) {
-        return whoWonThisBall(ballWinnerName).equals(playerA) ? playerB : playerA;
-    }
-
     private String calculateRoundScore(Player roundScorer, Player roundLooser) {
 
-        if (playerA.getScore() < 3 || playerB.getScore() < 3) {
+        if (roundScorer.getScore() < 3 || roundLooser.getScore() < 3) {
             if (roundScorer.doesHitTheWinPoint()) {
                 return String.format(WIN_MESSAGE_TEMPLATE, roundScorer.getName());
             } else {
@@ -61,16 +50,27 @@ public class TennisGame {
                     return String.format(WIN_MESSAGE_TEMPLATE, roundScorer.getName());
                 }
                 else {
-                    return String.format("Deuce, advantage for Player %s", playerA.getName());
+                    return String.format("Deuce, advantage for Player %s", roundScorer.getName());
                 }
             }
         }
     }
-
     private List<String> fetchScorersFromGameInput(String gameInput) {
 
         return IntStream.range(0, gameInput.length())
                 .mapToObj(index -> gameInput.substring(index, index + 1))
                 .toList();
+    }
+
+    private Player whoWonThisBall(String scorerName) throws UnknownPlayerException {
+        return switch (scorerName) {
+            case "A" -> playerA;
+            case "B" -> playerB;
+            default -> throw new UnknownPlayerException("Unknown player name" + scorerName);
+        };
+    }
+
+    private Player whoLostThisBall(String ballWinnerName) {
+        return whoWonThisBall(ballWinnerName).equals(playerA) ? playerB : playerA;
     }
 }

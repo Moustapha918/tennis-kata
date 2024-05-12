@@ -102,4 +102,29 @@ class TennisGameUTest {
         assertEquals(expectedScenario, actualScenario);
     }
 
+    @Test
+    void should_print_scenario_when_player_B_win_after_deuce_and_two_advantage_rounds() {
+
+        // GIVEN
+        var expectedScenario = List.of(
+                "Player A : 0 / Player B : 15",  // B score
+                "Player A : 15 / Player B : 15", // A score
+                "Player A : 30 / Player B : 15", // A score
+                "Player A : 30 / Player B : 30", // B score
+                "Player A : 40 / Player B : 30", // A score
+                "Deuce", // B score : deuce
+                "Deuce, advantage for Player A", // A score : deuce with A advantaged
+                "Deuce", // B score : deuce with B advantaged
+                "Deuce, advantage for Player B", // B score : deuce with A advantaged
+                "Player B wins the game");       // B score and wins
+
+        // WHEN
+        TennisGame sut = new TennisGame();
+        var actualScenario = sut.printScenario("BAABABABBB");
+
+        // THEN
+        assertEquals(expectedScenario, actualScenario);
+
+    }
+
 }
