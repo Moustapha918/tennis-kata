@@ -20,13 +20,21 @@ public class TennisGame {
     public List<String> printScenario(String gameInput) throws UnknownPlayerException {
 
         var scorers = fetchScorersFromGameInput(gameInput);
-        checkScorerList(scorers);
 
-        for (var scorer : scorers) {
-            updateScores(scorer);
-            scenario.add(calculateRoundScore(scorer));
+        for (var scorerName : scorers) {
+            Player ballWinner = whoWonThisBall(scorerName);
+            updateScores(scorerName);
+            scenario.add(calculateRoundScore(ballWinner));
         }
         return scenario;
+    }
+
+    private Player whoWonThisBall(String scorerName) throws UnknownPlayerException {
+        return switch (scorerName) {
+            case "A" -> playerA;
+            case "B" -> playerB;
+            default -> throw new UnknownPlayerException("Unknown player name" + scorerName);
+        };
     }
 
     private void updateScores(String scorer) {
@@ -38,12 +46,12 @@ public class TennisGame {
         }
     }
 
-    private String calculateRoundScore(String scorerName) {
+    private String calculateRoundScore(Player scorerName) {
 
         if (playerA.getScore() >= 4 || playerB.getScore() >= 4) {
-            return String.format(WIN_MESSAGE, scorerName);
+            return String.format(WIN_MESSAGE, scorerName.getName());
         } else {
-            return String.format("Player A : %s / Player B : %s", scoreToDisplay(playerA.getScore()), scoreToDisplay(playerA.getScore()));
+            return String.format("Player A : %s / Player B : %s", scoreToDisplay(playerA.getScore()), scoreToDisplay(playerB.getScore()));
         }
     }
 
@@ -55,14 +63,6 @@ public class TennisGame {
             case 3 -> "40";
             default -> throw new IllegalStateException("Unexpected value: " + intScore);
         };
-    }
-
-    private void checkScorerList(List<String> scorers) throws UnknownPlayerException {
-        for (String playerName : scorers) {
-            if (!playerA.getName().equals(playerName) && !playerB.getName().equals(playerName)) {
-                throw new UnknownPlayerException("Unknown player " + playerName);
-            }
-        }
     }
 
     private List<String> fetchScorersFromGameInput(String gameInput) {
