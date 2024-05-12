@@ -35,26 +35,43 @@ public class TennisGame {
 
     private String calculateRoundScore(Player roundScorer, Player roundLooser) {
 
-        if (roundScorer.getScore() < 3 || roundLooser.getScore() < 3) {
-            if (roundScorer.doesHitTheWinPoint()) {
-                return String.format(WIN_MESSAGE_TEMPLATE, roundScorer.getName());
-            } else {
-                return String.format(SCORE_MESSAGE_TEMPLATE, playerA.scoreToDisplay(), playerB.scoreToDisplay());
-            }
+        if (isGameInLoveStage(roundScorer, roundLooser)) {
+            return applyLoveStageRules(roundScorer);
         } else {
-            if (playerA.getScore() == playerB.getScore()) {
+            if (isDeuce(roundScorer, roundLooser)) {
                 return DEUCE_MESSAGE;
             } else
             {
-                if (roundScorer.getScore() - roundLooser.getScore() == 2) {
-                    return String.format(WIN_MESSAGE_TEMPLATE, roundScorer.getName());
-                }
-                else {
-                    return String.format("Deuce, advantage for Player %s", roundScorer.getName());
-                }
+                return applyAfterDeuceRules(roundScorer, roundLooser);
             }
         }
     }
+
+    private static String applyAfterDeuceRules(Player roundScorer, Player roundLooser) {
+        if (roundScorer.getScore() - roundLooser.getScore() == 2) {
+            return String.format(WIN_MESSAGE_TEMPLATE, roundScorer.getName());
+        }
+        else {
+            return String.format("Deuce, advantage for Player %s", roundScorer.getName());
+        }
+    }
+
+    private static boolean isDeuce(Player roundScorer, Player roundLooser) {
+        return roundScorer.getScore() == roundLooser.getScore();
+    }
+
+    private String applyLoveStageRules(Player roundScorer) {
+        if (roundScorer.doesHitTheWinPoint()) {
+            return String.format(WIN_MESSAGE_TEMPLATE, roundScorer.getName());
+        } else {
+            return String.format(SCORE_MESSAGE_TEMPLATE, playerA.scoreToDisplay(), playerB.scoreToDisplay());
+        }
+    }
+
+    private static boolean isGameInLoveStage(Player roundScorer, Player roundLooser) {
+        return roundScorer.getScore() < 3 || roundLooser.getScore() < 3;
+    }
+
     private List<String> fetchScorersFromGameInput(String gameInput) {
 
         return IntStream.range(0, gameInput.length())
