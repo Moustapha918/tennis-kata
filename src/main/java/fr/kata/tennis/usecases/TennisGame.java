@@ -23,7 +23,7 @@ public class TennisGame {
 
         for (var scorerName : scorers) {
             Player ballWinner = whoWonThisBall(scorerName);
-            updateScores(scorerName);
+            ballWinner.increaseScore();
             scenario.add(calculateRoundScore(ballWinner));
         }
         return scenario;
@@ -35,15 +35,6 @@ public class TennisGame {
             case "B" -> playerB;
             default -> throw new UnknownPlayerException("Unknown player name" + scorerName);
         };
-    }
-
-    private void updateScores(String scorer) {
-        if (scorer.equals(PLAYER_A_NAME)) {
-            playerA.increaseScore();
-        }
-        if (scorer.equals(PLAYER_B_NAME)) {
-            playerB.increaseScore();
-        }
     }
 
     private String calculateRoundScore(Player scorerName) {
