@@ -12,6 +12,7 @@ public class TennisGame {
     public static final String PLAYER_B_NAME = "B";
     private static final String WIN_MESSAGE_TEMPLATE = "Player %s wins the game";
     public static final String SCORE_MESSAGE_TEMPLATE = "Player A : %s / Player B : %s";
+    public static final String DEUCE_MESSAGE = "deuce";
 
     Player playerA = new Player(PLAYER_A_NAME);
     Player playerB = new Player(PLAYER_B_NAME);
@@ -40,11 +41,18 @@ public class TennisGame {
 
     private String calculateRoundScore(Player roundScorer) {
 
-        if (roundScorer.doesHitTheWinPoint()) {
-            return String.format(WIN_MESSAGE_TEMPLATE, roundScorer.getName());
+        if (playerA.getScore() < 3 || playerB.getScore() < 3) {
+            if (roundScorer.doesHitTheWinPoint()) {
+                return String.format(WIN_MESSAGE_TEMPLATE, roundScorer.getName());
+            } else {
+                return String.format(SCORE_MESSAGE_TEMPLATE, playerA.scoreToDisplay(), playerB.scoreToDisplay());
+            }
         } else {
-            return String.format(SCORE_MESSAGE_TEMPLATE, playerA.scoreToDisplay(), playerB.scoreToDisplay());
+            if (playerA.getScore() == playerB.getScore()) {
+                return DEUCE_MESSAGE;
+            }
         }
+        return null;
     }
 
     private List<String> fetchScorersFromGameInput(String gameInput) {
