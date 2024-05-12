@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TennisGameUTest {
 
     @Test
-    void should_write_scenario_for_A_player_scoring_all_balls() throws UnknownPlayerException {
+    void should_write_scenario_for_A_player_scoring_all_balls() {
 
         // GIVEN
         String scorerList = "AAAA";
@@ -41,7 +41,7 @@ class TennisGameUTest {
     }
 
     @Test
-    void should_print_scenario_when_player_B_win_after_remontada_before_deuce() throws UnknownPlayerException {
+    void should_print_scenario_when_player_B_win_after_remontada_before_deuce() {
         // GIVEN
         var expectedScenario = List.of(
                 "Player A : 15 / Player B : 0",
@@ -61,7 +61,7 @@ class TennisGameUTest {
     }
 
     @Test
-    void should_print_scenario_when_player_B_win_in_random_scenario() throws UnknownPlayerException {
+    void should_print_scenario_when_player_B_win_in_random_scenario() {
 
         // GIVEN
         var expectedScenario = List.of(
@@ -80,5 +80,26 @@ class TennisGameUTest {
         assertEquals(expectedScenario, actualScenario);
     }
 
+    @Test
+    void should_print_scenario_when_player_A_win_after_deuce_and_one_advantage() {
+
+        // GIVEN
+        var expectedScenario = List.of(
+                "Player A : 15 / Player B : 0",
+                "Player A : 15 / Player B : 15",
+                "Player A : 30 / Player B : 15",
+                "Player A : 30 / Player B : 30",
+                "Player A : 30 / Player B : 40",
+                "Deuce",
+                "Deuce, advantage for Player A",
+                "Player A wins the game");
+
+        // WHEN
+        TennisGame sut = new TennisGame();
+        var actualScenario = sut.printScenario("ABABBAAA");
+
+        // THEN
+        assertEquals(expectedScenario, actualScenario);
+    }
 
 }

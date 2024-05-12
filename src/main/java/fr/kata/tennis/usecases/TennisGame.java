@@ -18,7 +18,7 @@ public class TennisGame {
 
     private final List<String> scenario = new ArrayList<>();
 
-    public List<String> printScenario(String gameInput) throws UnknownPlayerException {
+    public List<String> printScenario(String gameInput) {
 
         var scorers = fetchScorersFromGameInput(gameInput);
 
