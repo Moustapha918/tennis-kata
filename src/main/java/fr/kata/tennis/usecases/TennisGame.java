@@ -12,7 +12,7 @@ public class TennisGame {
     public static final String PLAYER_B_NAME = "B";
     private static final String WIN_MESSAGE_TEMPLATE = "Player %s wins the game";
     public static final String SCORE_MESSAGE_TEMPLATE = "Player A : %s / Player B : %s";
-    public static final String DEUCE_MESSAGE = "deuce";
+    public static final String DEUCE_MESSAGE = "Deuce";
 
     Player playerA = new Player(PLAYER_A_NAME);
     Player playerB = new Player(PLAYER_B_NAME);
@@ -50,9 +50,16 @@ public class TennisGame {
         } else {
             if (playerA.getScore() == playerB.getScore()) {
                 return DEUCE_MESSAGE;
+            } else
+            {
+                if (playerA.getScore() - playerB.getScore() == 2) {
+                    return String.format(WIN_MESSAGE_TEMPLATE, playerA.getName());
+                }
+                else {
+                    return String.format("Deuce, advantage for Player %s", playerA.getName());
+                }
             }
         }
-        return null;
     }
 
     private List<String> fetchScorersFromGameInput(String gameInput) {
