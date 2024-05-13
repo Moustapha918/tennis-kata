@@ -62,7 +62,7 @@ public class TennisGame {
         }
     }
 
-    private static boolean isDeuce(Player roundScorer, Player roundLooser) {
+    private boolean isDeuce(Player roundScorer, Player roundLooser) {
         return roundScorer.getScore() == roundLooser.getScore();
     }
 
@@ -74,7 +74,7 @@ public class TennisGame {
         }
     }
 
-    private static boolean isGameInLoveStage(Player roundScorer, Player roundLooser) {
+    private boolean isGameInLoveStage(Player roundScorer, Player roundLooser) {
         return roundScorer.getScore() < 3 || roundLooser.getScore() < 3;
     }
 
