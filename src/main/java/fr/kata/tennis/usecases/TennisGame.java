@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static fr.kata.tennis.usecases.RoundOutCome.*;
+
 public class TennisGame {
 
     public static final String PLAYER_A_NAME = "A";
@@ -13,6 +15,7 @@ public class TennisGame {
     private static final String WIN_MESSAGE_TEMPLATE = "Player %s wins the game";
     public static final String SCORE_MESSAGE_TEMPLATE = "Player A : %s / Player B : %s";
     public static final String DEUCE_MESSAGE = "Deuce";
+    public static final String ADVANTAGE_MESSAGE_TEMPLATE = "Deuce, advantage for Player %s";
 
     Player playerA = new Player(PLAYER_A_NAME);
     Player playerB = new Player(PLAYER_B_NAME);
@@ -28,18 +31,21 @@ public class TennisGame {
             Player ballLooser = whoLostThisBall(scorerName);
 
             ballWinner.increaseScore();
-            scenario.add(calculateRoundScore(ballWinner, ballLooser));
+
+            var roundResult = calculateRoundScore(ballWinner, ballLooser);
+
+            scenario.add(formatedScore(roundResult, ballWinner));
         }
         return scenario;
     }
 
-    private String calculateRoundScore(Player roundScorer, Player roundLooser) {
+    private RoundOutCome calculateRoundScore(Player roundScorer, Player roundLooser) {
 
         if (isGameInLoveStage(roundScorer, roundLooser)) {
             return applyLoveStageRulesAndGetScore(roundScorer);
         } else {
             if (isDeuce(roundScorer, roundLooser)) {
-                return DEUCE_MESSAGE;
+                return DEUCE;
             } else
             {
                 return applyAfterDeuceRulesAndGetScore(roundScorer, roundLooser);
@@ -47,12 +53,12 @@ public class TennisGame {
         }
     }
 
-    private static String applyAfterDeuceRulesAndGetScore(Player roundScorer, Player roundLooser) {
+    private RoundOutCome applyAfterDeuceRulesAndGetScore(Player roundScorer, Player roundLooser) {
         if (roundScorer.getScore() - roundLooser.getScore() == 2) {
-            return String.format(WIN_MESSAGE_TEMPLATE, roundScorer.getName());
+            return WIN;
         }
         else {
-            return String.format("Deuce, advantage for Player %s", roundScorer.getName());
+            return ADVANTAGE;
         }
     }
 
@@ -60,11 +66,11 @@ public class TennisGame {
         return roundScorer.getScore() == roundLooser.getScore();
     }
 
-    private String applyLoveStageRulesAndGetScore(Player roundScorer) {
+    private RoundOutCome applyLoveStageRulesAndGetScore(Player roundScorer) {
         if (roundScorer.doesHitTheWinPoint()) {
-            return String.format(WIN_MESSAGE_TEMPLATE, roundScorer.getName());
+            return WIN;
         } else {
-            return String.format(SCORE_MESSAGE_TEMPLATE, playerA.scoreToDisplay(), playerB.scoreToDisplay());
+            return SCORE;
         }
     }
 
@@ -89,5 +95,14 @@ public class TennisGame {
 
     private Player whoLostThisBall(String ballWinnerName) {
         return whoWonThisBall(ballWinnerName).equals(playerA) ? playerB : playerA;
+    }
+
+    private String formatedScore(RoundOutCome roundOutCome, Player roundScorer) {
+        return switch (roundOutCome) {
+            case ADVANTAGE -> String.format(ADVANTAGE_MESSAGE_TEMPLATE, roundScorer.getName());
+            case WIN -> String.format(WIN_MESSAGE_TEMPLATE, roundScorer.getName());
+            case SCORE -> String.format(SCORE_MESSAGE_TEMPLATE, playerA.scoreToDisplay(), playerB.scoreToDisplay());
+            case DEUCE -> DEUCE_MESSAGE;
+        };
     }
 }
