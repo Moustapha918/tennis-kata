@@ -36,18 +36,18 @@ public class TennisGame {
     private String calculateRoundScore(Player roundScorer, Player roundLooser) {
 
         if (isGameInLoveStage(roundScorer, roundLooser)) {
-            return applyLoveStageRules(roundScorer);
+            return applyLoveStageRulesAndGetScore(roundScorer);
         } else {
             if (isDeuce(roundScorer, roundLooser)) {
                 return DEUCE_MESSAGE;
             } else
             {
-                return applyAfterDeuceRules(roundScorer, roundLooser);
+                return applyAfterDeuceRulesAndGetScore(roundScorer, roundLooser);
             }
         }
     }
 
-    private static String applyAfterDeuceRules(Player roundScorer, Player roundLooser) {
+    private static String applyAfterDeuceRulesAndGetScore(Player roundScorer, Player roundLooser) {
         if (roundScorer.getScore() - roundLooser.getScore() == 2) {
             return String.format(WIN_MESSAGE_TEMPLATE, roundScorer.getName());
         }
@@ -60,7 +60,7 @@ public class TennisGame {
         return roundScorer.getScore() == roundLooser.getScore();
     }
 
-    private String applyLoveStageRules(Player roundScorer) {
+    private String applyLoveStageRulesAndGetScore(Player roundScorer) {
         if (roundScorer.doesHitTheWinPoint()) {
             return String.format(WIN_MESSAGE_TEMPLATE, roundScorer.getName());
         } else {
