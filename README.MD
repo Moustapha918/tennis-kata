@@ -35,3 +35,15 @@ the following input “ABABAA” should print :
 “Player A : 40 / Player B : 30”
 
 “Player A wins the game”
+
+
+### Used tools
+ - Java 21
+ - Junit 5 for testing
+ - maven 4
+
+### Execute
+
+You can run this project by running the main method using your IDE or via Java command line
+
+Enjoy :)
