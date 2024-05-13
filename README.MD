@@ -1,7 +1,7 @@
 
 ## Tennis Kata
 
-### rules 
+### Rules 
 
 This Kata goal is to implement a simple tennis score computer.
 The scoring system consist in one game, divided by points :
