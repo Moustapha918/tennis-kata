@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static fr.kata.tennis.usecases.RoundOutCome.*;
+import static fr.kata.tennis.usecases.RoundResult.*;
 
 public class TennisGame {
 
@@ -39,7 +39,7 @@ public class TennisGame {
         return scenario;
     }
 
-    private RoundOutCome calculateRoundScore(Player roundScorer, Player roundLooser) {
+    private RoundResult calculateRoundScore(Player roundScorer, Player roundLooser) {
 
         if (isGameInLoveStage(roundScorer, roundLooser)) {
             return applyLoveStageRulesAndGetScore(roundScorer);
@@ -53,7 +53,7 @@ public class TennisGame {
         }
     }
 
-    private RoundOutCome applyAfterDeuceRulesAndGetScore(Player roundScorer, Player roundLooser) {
+    private RoundResult applyAfterDeuceRulesAndGetScore(Player roundScorer, Player roundLooser) {
         if (roundScorer.getScore() - roundLooser.getScore() == 2) {
             return WIN;
         }
@@ -66,7 +66,7 @@ public class TennisGame {
         return roundScorer.getScore() == roundLooser.getScore();
     }
 
-    private RoundOutCome applyLoveStageRulesAndGetScore(Player roundScorer) {
+    private RoundResult applyLoveStageRulesAndGetScore(Player roundScorer) {
         if (roundScorer.doesHitTheWinPoint()) {
             return WIN;
         } else {
@@ -97,8 +97,8 @@ public class TennisGame {
         return whoWonThisBall(ballWinnerName).equals(playerA) ? playerB : playerA;
     }
 
-    private String formatedScore(RoundOutCome roundOutCome, Player roundScorer) {
-        return switch (roundOutCome) {
+    private String formatedScore(RoundResult roundResult, Player roundScorer) {
+        return switch (roundResult) {
             case ADVANTAGE -> String.format(ADVANTAGE_MESSAGE_TEMPLATE, roundScorer.getName());
             case WIN -> String.format(WIN_MESSAGE_TEMPLATE, roundScorer.getName());
             case SCORE -> String.format(SCORE_MESSAGE_TEMPLATE, playerA.scoreToDisplay(), playerB.scoreToDisplay());
